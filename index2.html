@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexaflow CRM</title>
+<link rel="icon" href="#">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-particles" id="login-particles"></div>
+
+  <!-- Top bar -->
+  <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:18px 28px;z-index:20">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="logo-icon" id="login-logo-icon" style="width:36px;height:36px;font-size:15px">N</div>
+      <img id="login-logo-img" style="display:none;width:36px;height:36px;border-radius:8px;object-fit:contain">
+      <div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:16px;color:#fff;line-height:1">NexaFlow</div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--text3);text-transform:uppercase">CRM System</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid #22c55e33;background:#22c55e0a">
+      <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;display:inline-block"></span>
+      <span style="font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.08em">LIVE</span>
+    </div>
+  </div>
+
+  <div class="login-box">
+    <div style="margin-bottom:28px">
+      <div style="font-family:var(--font-head);font-weight:800;font-size:26px;color:#fff;margin-bottom:6px">Welcome back</div>
+      <div style="font-size:13px;color:var(--text3)">Sign in to your NexaFlow workspace.</div>
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+      <span style="font-size:11px;color:var(--text3);letter-spacing:.06em">Enter your credentials</span>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+
+    <div class="login-form">
+      <div class="form-group">
+        <label style="color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:none">Email address</label>
+        <input type="email" id="login-email" placeholder="you@company.com" autocomplete="email"
+          style="background:#ffffff0d;border:1.5px solid #ffffff1a;border-radius:12px;color:#fff;font-size:14px;padding:13px 16px">
+      </div>
+      <div class="form-group">
+        <label style="color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:none">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"
+          style="background:#ffffff0d;border:1.5px solid #ffffff1a;border-radius:12px;color:#fff;font-size:14px;padding:13px 16px"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="err-msg" id="login-err"></div>
+      <button class="btn btn-primary login-btn" id="login-btn" onclick="doLogin()" style="margin-top:8px;padding:14px;font-size:15px;font-weight:700;border-radius:12px;letter-spacing:.01em">
+        <span>Sign in &nbsp;→</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-icon" id="sidebar-logo-icon">N</div>
+    <img id="sidebar-logo-img" style="display:none;width:32px;height:32px;border-radius:8px;object-fit:contain">
+    <span class="logo-text">Nexaflow<span> CRM ↗</span></span>
+  </div>
+  <nav>
+    <span class="nav-label">Menu</span>
+    <button class="nav-item active" onclick="showPage('home',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      Home
+    </button>
+    <button class="nav-item" onclick="showPage('leads',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Leads
+    </button>
+    <button class="nav-item" onclick="showPage('suspended',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      Suspended
+    </button>
+    <button class="nav-item" id="action-nav-btn" onclick="showPage('action',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      <span style="flex:1;text-align:left">Action</span>
+      <span id="action-nav-badge" style="display:none;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center"></span>
+    </button>
+    <div class="nav-sep"></div>
+    <span class="nav-label">Tools</span>
+    <button class="nav-item" onclick="showPage('dashboard',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" onclick="showPage('funnel',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2V12.46L22 3z"/></svg>
+      Funnel
+    </button>
+    <button class="nav-item" onclick="showPage('sales',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Sales
+    </button>
+    <button class="nav-item" onclick="showPage('contacts',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Contacts
+    </button>
+    <div class="nav-sep"></div>
+    <span class="nav-label">System</span>
+    <button class="nav-item" onclick="showPage('settings',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip" onclick="doLogout()">
+      <div class="avatar" id="sidebar-avatar">U</div>
+      <div>
+        <div class="user-name" id="sidebar-uname">User</div>
+        <div class="user-role">Click to logout</div>
+      </div>
+    </div>
+  </div>
+</aside>
+<div id="sidebar-overlay" onclick="closeSidebar()" style="display:none;position:fixed;inset:0;background:#00000060;z-index:99"></div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="icon-btn" id="menu-toggle" onclick="toggleSidebar()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="page-title" id="page-title">Home</div>
+      <div style="position:relative;margin-left:12px" id="search-wrap">
+        <input id="global-search" type="text" placeholder="Search leads, contacts..."
+          style="width:220px;padding:7px 12px 7px 34px;font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text);outline:none;transition:all .2s"
+          oninput="onSearch(this.value)"
+          onfocus="this.style.borderColor='var(--accent)';this.style.width='280px'"
+          onblur="this.style.borderColor='var(--border)';this.style.width='220px';if(!this.value)closeSearch()">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text3);pointer-events:none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <div id="search-dropdown" style="display:none;position:absolute;top:calc(100% + 8px);left:0;width:360px;background:var(--surface);border:1px solid var(--border2);border-radius:12px;box-shadow:0 8px 32px #00000080;z-index:9999;max-height:400px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="width:36px;height:36px">
+        <svg id="theme-icon-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg id="theme-icon-light" style="display:none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <div class="db-status"><span class="db-dot" id="db-dot"></span><span id="db-label">Local</span></div>
+      <button class="icon-btn" id="followup-bell" onclick="toggleFollowupPopup()" style="position:relative;width:36px;height:36px;">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span id="followup-bell-dot" style="display:none;position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--surface)"></span>
+      </button>
+      <!-- FOLLOWUP NOTIFICATION POPUP -->
+      <div id="followup-popup" style="display:none;position:fixed;top:70px;right:24px;z-index:110999;width:340px;max-height:480px;overflow-y:auto;background:var(--surface);border:1px solid var(--border2);border-radius:16px;box-shadow:0 8px 32px #00000080;">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px">
+            🔔 <span>Follow-up Reminders</span>
+            <span id="followup-badge-count" class="badge badge-red" style="font-size:11px"></span>
+          </div>
+          <button onclick="closeFollowupPopup()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;line-height:1">×</button>
+        </div>
+        <div id="followup-popup-list" style="padding:12px"></div>
+      </div>
+      <button class="btn btn-primary" onclick="openQuickModal('lead')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Lead
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-label" id="stat-quarter-label">Q1 Sales</div>
+          <div class="stat-value" id="stat-total">₹0</div>
+          <div class="stat-sub" id="stat-quarter-sub">Current quarter</div>
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value" id="stat-month">₹0</div>
+          <div class="stat-sub" id="stat-month-sub">0 deals</div>
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">Active Leads</div>
+          <div class="stat-value" id="stat-leads">0</div>
+          <div class="stat-sub">Not suspended</div>
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        </div>
+      </div>
+      <div class="section" style="margin-bottom:16px;overflow:visible">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20"/><path d="M2 12h20"/></svg>
+            Lead Overview
+          </div>
+          <div id="lead-chart-legend" style="display:flex;gap:16px;font-size:12px;color:var(--text2)"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:center;width:100%;padding:8px 16px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0">
+            <div style="position:relative;width:210px;height:210px">
+              <canvas id="leads-pie" width="210" height="210" style="filter:drop-shadow(0 4px 20px rgba(0,0,0,0.12))"></canvas>
+              <div id="pie-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
+                <div style="font-family:var(--font-head);font-size:26px;font-weight:800;color:var(--text);line-height:1" id="pie-total">0</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px">Total Leads</div>
+              </div>
+            </div>
+          </div>
+          <div id="pie-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;overflow:visible;padding:4px 2px"></div>
+        </div>
+      </div>
+      <!-- FOLLOW-UP ALERTS -->
+      <div class="section" id="followup-home-section" style="display:none;margin-bottom:16px;border-color:var(--amber)"></div>
+      <div class="grid-2" style="margin-bottom:16px">
+        <!-- TODAY'S TASKS -->
+        <div class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              Tasks
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button class="icon-btn" onclick="changeHomeDate(-1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
+              <span id="home-date-label" style="font-size:12px;color:var(--text2);min-width:60px;text-align:center">Today</span>
+              <button class="icon-btn" onclick="changeHomeDate(1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></button>
+              <button class="btn btn-ghost" style="padding:5px 10px;font-size:12px" onclick="openQuickModal('task')">+ Add</button>
+            </div>
+          </div>
+          <div class="task-grid" id="today-tasks"></div>
+        </div>
+        <!-- SCHEDULED CALLS -->
+        <div class="section">
+          <div class="section-head">
+            <div class="section-title">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              Scheduled Calls
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button class="icon-btn" onclick="changeCallsDate(-1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
+              <span id="calls-date-label" style="font-size:12px;color:var(--text2);min-width:60px;text-align:center">Today</span>
+              <button class="icon-btn" onclick="changeCallsDate(1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg></button>
+              <button class="btn btn-ghost" style="padding:5px 10px;font-size:12px" onclick="openQuickModal('call')">+ Schedule</button>
+            </div>
+          </div>
+          <div id="calls-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADS PAGE -->
+    <div class="page" id="page-leads">
+      <div class="stats-row" style="grid-template-columns:1fr 1fr;margin-bottom:16px">
+        <div class="stat-card green">
+          <div class="stat-label">Leads Added Today</div>
+          <div class="stat-value" id="leads-added-today">0</div>
+          <div class="stat-sub" id="leads-added-today-sub">today</div>
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg></div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">Escalated Today</div>
+          <div class="stat-value" id="leads-escalated-today">0</div>
+          <div class="stat-sub" id="leads-escalated-today-sub">moved from Not Escalated</div>
+          <div class="stat-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            All Leads
+          </div>
+          <button class="btn btn-primary" onclick="openQuickModal('lead')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Lead
+          </button>
+        </div>
+        <div class="leads-filter" id="leads-filter"></div>
+        <div style="overflow-x:auto">
+          <table id="leads-table">
+            <thead>
+              <tr>
+                <th>Lead</th><th>Status</th><th>Phone</th><th>City</th><th>Website</th><th>GBP</th><th>Report</th><th>Links</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION PAGE -->
+    <div class="page" id="page-action" style="width:100%">
+      <div style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--text)">Action Required ⚡</div>
+          <button class="btn btn-ghost" onclick="refreshActionPage()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            Refresh
+          </button>
+        </div>
+        <div style="font-size:13px;color:var(--text3)">Leads stuck in the same status for 5 or more days</div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stat-card" style="border-color:rgba(239,68,68,0.3)">
+          <div class="stat-label">Critical (10+ days)</div>
+          <div class="stat-value" id="action-critical" style="color:#ef4444">0</div>
+          <div class="stat-sub">Needs immediate attention</div>
+        </div>
+        <div class="stat-card" style="border-color:rgba(245,158,11,0.3)">
+          <div class="stat-label">Warning (5–9 days)</div>
+          <div class="stat-value" id="action-warning" style="color:#f59e0b">0</div>
+          <div class="stat-sub">Follow up soon</div>
+        </div>
+        <div class="stat-card" style="border-color:rgba(79,142,247,0.3)">
+          <div class="stat-label">Total Stale Leads</div>
+          <div class="stat-value" id="action-total" style="color:var(--accent)">0</div>
+          <div class="stat-sub">Across all statuses</div>
+        </div>
+      </div>
+      <div class="section" style="width:100%">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Stale Leads
+          </div>
+          <div style="font-size:12px;color:var(--text3)" id="action-last-updated"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Lead</th><th>Status</th><th>Days Stuck</th><th>Phone</th><th>City</th><th>Links</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="action-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUSPENDED PAGE -->
+    <div class="page" id="page-suspended" style="width:100%">
+      <div class="section" style="width:100%">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Suspended Leads
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr><th>Lead</th><th>Phone</th><th>City</th><th>Note</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="suspended-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page" id="page-dashboard" style="padding:0;margin:-24px;position:relative;">
+      <div id="dashboard-inner" style="display:none;position:fixed;inset:0;z-index:9990;background:var(--bg);flex-direction:column;">
+        <div style="height:48px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0">
+          <button onclick="goBackFromDashboard()" style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 14px;color:var(--text);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2"><polyline points="15,18 9,12 15,6"/></svg>
+            Back to CRM
+          </button>
+          <span style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text2)">Dashboard</span>
+        </div>
+        <iframe id="dash-frame" src="" style="flex:1;width:100%;border:none;display:block;"></iframe>
+      </div>
+    </div>
+
+    <!-- FUNNEL PAGE -->
+    <div class="page" id="page-funnel" style="width:100%">
+      <div style="margin-bottom:20px">
+        <div style="font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px">↭ Conversion Funnel</div>
+        <div style="font-size:13px;color:var(--text3)">How leads progress through each stage — drop-off at every step</div>
+      </div>
+      <div class="section" id="funnel-section"></div>
+    </div>
+
+    <!-- SALES PAGE -->
+    <div class="page" id="page-sales">
+      <div class="stats-row" style="margin-bottom:16px;grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card blue">
+          <div class="stat-label">Q1 (Jan–Mar)</div>
+          <div class="stat-value" id="sales-q1">₹0</div>
+          <div class="stat-sub" id="sales-q1-sub">0 deals</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Q2 (Apr–Jun)</div>
+          <div class="stat-value" id="sales-q2">₹0</div>
+          <div class="stat-sub" id="sales-q2-sub">0 deals</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">Q3 (Jul–Sep)</div>
+          <div class="stat-value" id="sales-q3">₹0</div>
+          <div class="stat-sub" id="sales-q3-sub">0 deals</div>
+        </div>
+        <div class="stat-card blue" style="--accent:#ef4444">
+          <div class="stat-label">Q4 (Oct–Dec)</div>
+          <div class="stat-value" id="sales-q4">₹0</div>
+          <div class="stat-sub" id="sales-q4-sub">0 deals</div>
+        </div>
+      </div>
+      <div class="section" style="margin-bottom:16px">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Monthly Revenue
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="icon-btn" onclick="changeChartYear(-1)" style="width:28px;height:28px">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+            </button>
+            <span id="chart-year-label" style="font-size:13px;font-weight:600;color:var(--text);min-width:40px;text-align:center"></span>
+            <button class="icon-btn" onclick="changeChartYear(1)" style="width:28px;height:28px">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="position:relative;height:220px;width:100%">
+          <canvas id="sales-bar-chart"></canvas>
+        </div>
+        <div id="chart-summary" style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap"></div>
+      </div>
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            Sales
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div id="today-sales-widget" style="display:flex;align-items:center;gap:10px;padding:8px 16px;background:linear-gradient(135deg,#f59e0b18,#f59e0b08);border:1px solid #f59e0b33;border-radius:12px;position:relative;overflow:hidden">
+              <div style="position:relative;width:36px;height:36px;flex-shrink:0">
+                <svg viewBox="0 0 36 36" style="width:36px;height:36px">
+                  <ellipse cx="18" cy="28" rx="12" ry="4" fill="#f59e0b" opacity="0.4"/>
+                  <ellipse cx="18" cy="27" rx="12" ry="4" fill="#fbbf24"/>
+                  <rect x="6" y="23" width="24" height="4" fill="#fbbf24"/>
+                  <ellipse cx="18" cy="23" rx="12" ry="4" fill="#fcd34d"/>
+                  <ellipse cx="18" cy="20" rx="12" ry="4" fill="#f59e0b" opacity="0.4"/>
+                  <ellipse cx="18" cy="19" rx="12" ry="4" fill="#fbbf24"/>
+                  <rect x="6" y="15" width="24" height="4" fill="#fbbf24"/>
+                  <ellipse cx="18" cy="15" rx="12" ry="4" fill="#fcd34d"/>
+                  <ellipse cx="18" cy="12" rx="12" ry="4" fill="#f59e0b" opacity="0.4"/>
+                  <ellipse cx="18" cy="11" rx="12" ry="4" fill="#fbbf24"/>
+                  <rect x="6" y="7" width="24" height="4" fill="#fbbf24"/>
+                  <ellipse cx="18" cy="7" rx="12" ry="4" fill="#fcd34d"/>
+                  <ellipse cx="15" cy="6" rx="3" ry="1.2" fill="#fef3c7" opacity="0.7"/>
+                </svg>
+                <div id="coin-float" style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:12px;opacity:0;pointer-events:none">🪙</div>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber)">Today's Sales</div>
+                <div style="font-family:var(--font-head);font-size:18px;font-weight:800;color:var(--text);line-height:1.1" id="sales-today-amt">₹0</div>
+                <div style="font-size:11px;color:var(--text3)" id="sales-today-count">0 deals</div>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="openSaleModal()">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Sale
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr><th>Lead</th><th>Amount</th><th>Transaction ID</th><th>Date</th><th>Quarter</th><th>Note</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="sales-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACTS PAGE -->
+    <div class="page" id="page-contacts" style="width:100%;padding-top:0">
+      <div class="section" style="width:100%;margin-top:0">
+        <div class="section-head">
+          <div class="section-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Contacts
+          </div>
+          <button class="btn btn-primary" onclick="openContactModal()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Contact
+          </button>
+        </div>
+        <div class="contacts-grid" id="contacts-grid"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div style="max-width:560px">
+        <div class="settings-group">
+          <div class="settings-group-title">Profile</div>
+          <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px">
+            <div style="position:relative;flex-shrink:0">
+              <div id="profile-avatar-big" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:24px;font-weight:800;color:#fff;overflow:hidden">
+                <span id="profile-avatar-initials">U</span>
+                <img id="profile-avatar-img" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%">
+              </div>
+              <label for="profile-img-input" style="position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid var(--surface2)">
+                <svg fill="none" stroke="#fff" viewBox="0 0 24 24" style="width:11px;height:11px;stroke-width:2.5"><path d="M12 5v14M5 12h14"/></svg>
+              </label>
+              <input type="file" id="profile-img-input" accept="image/*" style="display:none" onchange="handleProfileImg(this)">
+            </div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--text)" id="profile-name-display">User</div>
+              <div style="font-size:12px;color:var(--text3)" id="profile-email-display">—</div>
+              <button onclick="removeProfileImg()" id="remove-img-btn" style="display:none;margin-top:6px;font-size:11.5px;color:var(--red);background:none;border:none;cursor:pointer;padding:0">Remove photo</button>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div style="flex:1;margin-right:12px">
+              <div class="setting-label">Display Name</div>
+              <div class="setting-desc">Shown in sidebar and topbar</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="text" id="profile-name-input" placeholder="Your name" style="width:160px;padding:7px 10px;font-size:13px">
+              <button class="btn btn-primary" style="padding:7px 14px" onclick="saveProfileName()">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">Data</div>
+          <div class="setting-item">
+            <div>
+              <div class="setting-label">Export Leads</div>
+              <div class="setting-desc">Download all leads as a CSV spreadsheet</div>
+            </div>
+            <button class="btn btn-ghost" onclick="exportLeadsCSV()">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </button>
+          </div>
+          <div class="setting-item">
+            <div>
+              <div class="setting-label">Import Leads</div>
+              <div class="setting-desc">Upload a CSV file to import leads</div>
+            </div>
+            <label for="import-csv-input" class="btn btn-ghost" style="cursor:pointer">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px;stroke-width:2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10" style="transform:rotate(180deg);transform-origin:12px 12px"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Import CSV
+            </label>
+            <input type="file" id="import-csv-input" accept=".csv" style="display:none" onchange="importLeadsCSV(this)">
+          </div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">Account</div>
+          <div class="setting-item">
+            <div>
+              <div class="setting-label">Logged in as</div>
+              <div class="setting-desc" id="settings-email">—</div>
+            </div>
+            <button class="btn btn-danger" onclick="doLogout()">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FAB Quick Create -->
+<div id="quick-menu">
+  <button class="fab" onclick="toggleFab()" id="fab-btn">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <div class="fab-items hidden" id="fab-items">
+    <div class="fab-item" onclick="closeFab();openQuickModal('lead')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Create Lead
+    </div>
+    <div class="fab-item" onclick="closeFab();openQuickModal('task')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Create Task
+    </div>
+    <div class="fab-item" onclick="closeFab();openQuickModal('call')">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      Schedule Call
+    </div>
+  </div>
+</div>
+
+
+<!-- LEAD MODAL -->
+<div class="modal-overlay" id="modal-lead">
+  <div class="modal modal-lg">
+    <div class="modal-title">
+      <span id="lead-modal-title">Create Lead</span>
+      <button class="modal-close" onclick="closeModal('modal-lead')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <input type="hidden" id="lead-edit-id">
+    <div class="form-section-label">Lead Status</div>
+    <div class="radio-group" id="lead-status-group">
+      <label class="radio-option selected"><input type="radio" name="lead-status" value="not_escalated" checked> Not Escalated</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="outreach_wapp"> Outreach (Wapp)</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="outreach_call"> Outreach (Call)</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="prospecting"> Unresponsive</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="payment"> Payment</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="followup"> Follow-up</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="converted"> Converted</label>
+      <label class="radio-option"><input type="radio" name="lead-status" value="suspended"> Suspended</label>
+    </div>
+    <div id="followup-date-row" class="form-row full" style="display:none;margin-top:14px;padding:14px;border-radius:var(--radius-sm);border:1px solid var(--accent);background:var(--accent-soft)">
+      <div class="form-group">
+        <label>📅 Follow-up Date</label>
+        <input type="date" id="lead-followup-date">
+      </div>
+    </div>
+    <div id="sale-amount-row" class="form-row full sale-highlight" style="display:none;margin-top:14px;padding:14px;border-radius:var(--radius-sm);border:1px solid var(--green)">
+      <div class="form-group">
+        <label>💰 Sale Amount (₹)</label>
+        <input type="number" id="lead-sale" placeholder="Enter deal value..." min="0">
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="form-section-label">Lead Information</div>
+   <div class="form-row">
+        <div class="form-group">
+          <label>Lead Name *</label>
+          <input type="text" id="lead-name" placeholder="Business / Person name">
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="lead-city" placeholder="City">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6z"/></svg>
+            <input type="tel" id="lead-phone" placeholder="XXXXX XXXXX" value="+91">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number</label>
+          <div class="input-with-icon">
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            <input type="tel" id="lead-wapp" placeholder="XXXXX XXXXX" value="+91">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:4px">
+      <div class="form-section-label">Business Details</div>
+      <div class="form-row three">
+        <div class="form-group">
+          <label>Website</label>
+          <select id="lead-website">
+            <option value="yes">✅ Yes</option>
+            <option value="no">❌ No</option>
+            <option value="not_working">⚠️ Not Working</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Report</label>
+          <select id="lead-report">
+            <option value="yes">✅ Yes</option>
+            <option value="no">❌ No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>GBP Rank</label>
+          <input type="text" id="lead-gbp-rank" placeholder="e.g. #3">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Reviews</label>
+          <input type="number" id="lead-reviews" placeholder="No. of reviews" min="0">
+        </div>
+        <div class="form-group">
+          <label>GBP URL</label>
+          <input type="url" id="lead-gbp-url" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+    </div>
+ <div style="margin-top:4px">
+      <div class="form-section-label">Notes</div>
+      <div class="form-row" style="grid-template-columns:1fr 130px;gap:14px;align-items:start">
+        <div class="form-group">
+          <label>Note</label>
+          <textarea id="lead-note" placeholder="Add any notes about this lead..." style="min-height:48px;resize:none"></textarea>
+        </div>
+        <div class="form-group">
+          <label>⏱️ Timing</label>
+          <input type="text" id="lead-timing" placeholder="e.g. 10am–6pm">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-lead')">Cancel</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-primary" onclick="saveLead(false)">Save Lead</button>
+        <button onclick="saveLead(true)" title="Save & Create Another" style="width:36px;height:36px;border-radius:8px;background:var(--accent-soft);border:1px solid var(--accent)33;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0" onmouseover="this.style.background='var(--accent)';this.querySelector('svg').style.stroke='#fff'" onmouseout="this.style.background='var(--accent-soft)';this.querySelector('svg').style.stroke='var(--accent)'">
+          <svg fill="none" stroke="var(--accent)" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2;transition:stroke .18s">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            <line x1="19" y1="1" x2="19" y2="7"/>
+            <line x1="16" y1="4" x2="22" y2="4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TASK MODAL -->
+<div class="modal-overlay" id="modal-task">
+  <div class="modal">
+    <div class="modal-title">
+      Create Task
+      <button class="modal-close" onclick="closeModal('modal-task')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Task Title *</label>
+        <input type="text" id="task-title" placeholder="What needs to be done?">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="task-date" min="">
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select id="task-priority">
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Note</label>
+        <textarea id="task-note" placeholder="Additional details..." style="min-height:52px"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-task')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Create Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- CALL MODAL -->
+<div class="modal-overlay" id="modal-call">
+  <div class="modal">
+    <div class="modal-title">
+      Schedule Call
+      <button class="modal-close" onclick="closeModal('modal-call')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Contact Name *</label>
+        <input type="text" id="call-name" placeholder="Who is this call with?">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" id="call-phone" placeholder="+91XXXXX XXXXX">
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <input type="time" id="call-time">
+      </div>
+    </div>
+ <div class="form-group" style="margin-bottom:14px">
+      <label>Date</label>
+      <div class="cal-wrap" id="call-cal"></div>
+      <input type="hidden" id="call-date">
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Note</label>
+        <input type="text" id="call-note" placeholder="Call agenda or notes...">
+      </div>
+    </div>
+      <!-- REMINDER ROW -->
+      <div style="padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0" id="reminder-toggle-row">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">🔔 Reminder</div>
+            <div style="font-size:11.5px;color:var(--text3);margin-top:2px">Get reminded before the call</div>
+          </div>
+          <div class="toggle" id="reminder-toggle" onclick="toggleReminderOption()"></div>
+        </div>
+        <div id="reminder-options" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+          <label style="margin-bottom:6px">Remind me</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="reminder-chips">
+            <button onclick="selectReminder(5)"  class="reminder-chip" data-val="5">5 min before</button>
+            <button onclick="selectReminder(10)" class="reminder-chip" data-val="10">10 min before</button>
+            <button onclick="selectReminder(15)" class="reminder-chip" data-val="15">15 min before</button>
+            <button onclick="selectReminder(30)" class="reminder-chip" data-val="30">30 min before</button>
+            <button onclick="selectReminder(60)" class="reminder-chip" data-val="60">1 hr before</button>
+          </div>
+          <input type="hidden" id="call-reminder-mins" value="">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-call')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveCall()">Schedule</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="modal-contact">
+  <div class="modal">
+    <div class="modal-title">
+      Add Contact
+      <button class="modal-close" onclick="closeModal('modal-contact')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name *</label>
+        <input type="text" id="contact-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" id="contact-phone" placeholder="+91XXXXX XXXXX">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="contact-city" placeholder="City">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp</label>
+        <input type="tel" id="contact-wapp" placeholder="+91XXXXX XXXXX">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Note</label>
+        <input type="text" id="contact-note" placeholder="Tags or notes...">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-contact')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveContact()">Save Contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- SALE MODAL -->
+<div class="modal-overlay" id="modal-sale">
+  <div class="modal">
+    <div class="modal-title">
+      Add Sale
+      <button class="modal-close" onclick="closeModal('modal-sale')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Lead Name *</label>
+        <select id="sale-lead">
+          <option value="">-- Select Lead --</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount (₹) *</label>
+        <input type="number" id="sale-amount" placeholder="Enter amount" min="0">
+      </div>
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="sale-date">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Transaction ID</label>
+        <input type="text" id="sale-txn" placeholder="UTR / Transaction ID">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-group">
+        <label>Note</label>
+        <textarea id="sale-note" placeholder="Any additional notes..." style="min-height:52px"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-sale')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSale()">Save Sale</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK STATUS CONTEXT MENU -->
+<div id="status-context-menu" style="display:none;position:fixed;z-index:9999;background:var(--surface);border:1px solid var(--border2);border-radius:12px;box-shadow:0 8px 32px #00000080;padding:6px;min-width:200px">
+  <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:6px 10px 4px">Change Status</div>
+  <div id="status-menu-lead-name" style="font-size:12px;font-weight:600;color:var(--accent);padding:2px 10px 8px;border-bottom:1px solid var(--border);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px"></div>
+  <div id="status-menu-items"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- APP LOADER -->
+<div id="app-loader" style="display:none;position:fixed;inset:0;background:#0d0f14;z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+  <div style="width:44px;height:44px;border:3px solid #ffffff10;border-top-color:var(--accent);border-radius:50%;animation:rotateRing .7s linear infinite"></div>
+  <div style="font-family:var(--font-head);font-size:14px;font-weight:600;color:var(--text2)">Loading your workspace...</div>
+</div>
+
+<!-- FOLLOWUP QUICK MODAL -->
+<div class="modal-overlay" id="modal-followup-quick">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title">📅 Set Follow-up</div>
+      <button class="modal-close" onclick="cancelFollowupQuick()">×</button>
+    </div>
+    <div class="modal-body">
+
+      <div style="margin-bottom:16px">
+        <label class="form-label">Follow-up Type</label>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="fq-type-btn" data-type="call" onclick="selectFqType('call')"
+            style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+            📞 Call
+          </button>
+          <button class="fq-type-btn" data-type="payment" onclick="selectFqType('payment')"
+            style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+            💳 Payment
+          </button>
+          <button class="fq-type-btn" data-type="gbp" onclick="selectFqType('gbp')"
+            style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+            📍 GBP Report
+          </button>
+          <button class="fq-type-btn" data-type="nudge" onclick="selectFqType('nudge')"
+  style="flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+  🔔 Nudge
+</button>
+        </div>
+      </div>
+
+      <div id="fq-fields" style="display:none">
+        <div class="form-row">
+          <label class="form-label">Date</label>
+          <input type="date" id="fq-date" class="form-input">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Time</label>
+          <input type="time" id="fq-time" class="form-input">
+        </div>
+        <div class="form-row" id="fq-amount-row" style="display:none">
+          <label class="form-label">Amount Due (₹)</label>
+          <input type="number" id="fq-amount" class="form-input" placeholder="Enter amount due">
+        </div>
+        <div class="form-row" id="fq-call-subtype-row" style="display:none">
+  <label class="form-label">Call Type</label>
+  <div style="display:flex;gap:8px;margin-top:6px">
+    <button class="fq-subtype-btn" data-sub="pitching" onclick="selectFqSubtype('pitching')"
+      style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+      🎯 Pitching Call
+    </button>
+    <button class="fq-subtype-btn" data-sub="prospect" onclick="selectFqSubtype('prospect')"
+      style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s">
+      🔍 Prospect Call
+    </button>
+  </div>
+</div>
+        <div class="form-row">
+          <label class="form-label">Note</label>
+          <textarea id="fq-note" class="form-input" rows="2" placeholder="Add a note..."></textarea>
+        </div>
+        <div id="fq-err" style="color:var(--red);font-size:12px;margin-top:4px"></div>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-ghost" onclick="cancelFollowupQuick()" style="flex:1">Cancel</button>
+          <button class="btn btn-primary" onclick="confirmFollowupQuick()" style="flex:1">Confirm</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="realtime.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
